@@ -11,6 +11,8 @@ import android.widget.*;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.squareup.picasso.Picasso;
 
 import stanford.androidlib.*;
@@ -23,19 +25,26 @@ public class PuppyActivity extends SimpleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puppy);
+        ImageView img = $IV(R.id.puppyphoto);
     }
 
     public void clickMeClick(View view) {
         //widget effects
         YoYo.with(Techniques.Wobble)
-                .duration(5000)
+                .duration(2000)
+                .withListener(new AnimatorListenerAdapter() {
+                    @Override  // to perform an action after effect is completed, need to implement .withListener of YoYo
+                    public void onAnimationEnd(Animator animation) {
+                        displayImage();
+                    }
+                })
                 .playOn(view);
 
-        // to perform an action after effect is completed, need to implement .withListener of YoYo
+    }
 
-
+    private void displayImage(){
         //download and display
-        ImageView img = $IV(R.id.puppyphoto);
+
         Picasso.with(this)
                 .load("http://www.martystepp.com/dogs/barney-and-clyde-12.jpg")
                 .placeholder(R.drawable.loading)
